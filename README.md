@@ -1,6 +1,6 @@
 # Pepper — Projet MEA4
 
-Document de référence regroupant l'infrastructure réseau (routeur Edimax) et la configuration du poste de travail Arch Linux (Python 2 & SDK NAOqi).
+Document de référence regroupant l'infrastructure réseau (routeur Edimax), la suite Choregraphe 2.5 et la configuration du poste de travail Arch Linux (Python 2 & SDK NAOqi).
 
 ---
 
@@ -11,7 +11,13 @@ Document de référence regroupant l'infrastructure réseau (routeur Edimax) et 
   - [3. Méthode Alternative : ConnManCTL interactif](#3-méthode-alternative--connmanctl-interactif)
   - [4. Vérification de la Liaison Réseau](#4-vérification-de-la-liaison-réseau)
   - [5. Dépannage Réseau](#5-dépannage-réseau)
-- [Partie 2 : Installation et Configuration de Python 2 & du SDK NAOqi](#partie-2--installation-et-configuration-de-python-2--du-sdk-naoqi-arch-linux--omarchy)
+- [Partie 2 : Installation et Configuration de Choregraphe 2.5.10.7](#partie-2--installation-et-configuration-de-choregraphe-25107)
+  - [1. Téléchargement et Extraction](#1-téléchargement-et-extraction)
+  - [2. Dépendances et Correctif Système (ZLIB)](#2-dépendances-et-correctif-système-zlib)
+  - [3. Clé de Licence Officielle](#3-clé-de-licence-officielle)
+  - [4. Lancement et Connexion au Robot](#4-lancement-et-connexion-au-robot)
+  - [5. Résolution des Erreurs Choregraphe](#5-résolution-des-erreurs-choregraphe)
+- [Partie 3 : Installation et Configuration de Python 2 & du SDK NAOqi](#partie-3--installation-et-configuration-de-python-2--du-sdk-naoqi-arch-linux--omarchy)
   - [1. Prérequis & Contexte](#1-prérequis--contexte)
   - [2. Installation de Python 2](#2-installation-de-python-2)
   - [3. Extraction du SDK NAOqi Python](#3-extraction-du-sdk-naoqi-python)
@@ -156,7 +162,80 @@ connmanctl services | grep edimax
 
 ---
 
-# Partie 2 : Installation et Configuration de Python 2 & du SDK NAOqi (Arch Linux / Omarchy)
+# Partie 2 : Installation et Configuration de Choregraphe 2.5.10.7
+
+Cette section décrit la mise en place de la suite officielle Choregraphe 2.5.10.7 sur Arch Linux.  
+> **Important** : Ne pas utiliser Choregraphe 2.8.x avec Pepper NAOqi 2.5 sous peine de provoquer l'erreur bloquante `failed to install package: ISerialization error Status Read Past End`.
+
+## 1. Téléchargement et Extraction
+
+1. Téléchargez l'archive standalone x86_64 : `choregraphe-suite-2.5.10.7-linux64.tar.gz`.
+2. Extrayez le dossier dans votre espace utilisateur :
+   ```bash
+   cd ~/Documents/Polytech/Projet/Pepper
+   tar -xzf choregraphe-suite-2.5.10.7-linux64.tar.gz
+   ```
+
+---
+
+## 2. Dépendances et Correctif Système (ZLIB)
+
+Sur les distributions Linux modernes, la bibliothèque `libz.so` embarquée dans le bundle Choregraphe entre en conflit avec celle du système hôte (`libz.so.1: version 'ZLIB_1.2.9' not found`).
+
+Pour résoudre ce conflit, forcez Choregraphe à utiliser la version système en masquant la bibliothèque interne :
+
+```bash
+cd ~/Documents/Polytech/Projet/Pepper/choregraphe-suite-2.5.10.7-linux64/lib
+mv libz.so.1 libz.so.1.bak
+```
+
+Installez également les dépendances graphiques et de compatibilité usuelles si elles sont absentes :
+```bash
+sudo pacman -S --needed libglvnd libpng12-compat libx11 libxext libxrender
+```
+
+---
+
+## 3. Clé de Licence Officielle
+
+Au tout premier lancement, Choregraphe 2.5 requiert une clé d'activation. Utilisez la licence officielle mise à disposition par SoftBank Robotics :
+
+```text
+654e-4564-153c-6518-2f44-7562-206e-4c60-5f47-5f45
+```
+
+---
+
+## 4. Lancement et Connexion au Robot
+
+1. Lancez l'exécutable Choregraphe :
+   ```bash
+   cd ~/Documents/Polytech/Projet/Pepper/choregraphe-suite-2.5.10.7-linux64
+   ./choregraphe
+   ```
+
+2. Connectez-vous à Pepper :
+   * Cliquez sur **Connexion** > **Se connecter à...** (icône robot avec prise).
+   * Renseignez l'adresse IP (`192.168.2.101`) et le port par défaut (`9559`).
+   * Validez la sélection.
+
+---
+
+## 5. Résolution des Erreurs Choregraphe
+
+* **`Starting behavior failed - ALAutonomousLife::switchFocus failed / permission violation(s): language`** :
+  * Cette erreur survient quand la langue définie dans le projet Choregraphe ne correspond pas à la langue active du moteur vocal de Pepper.
+  * *Correction dans Choregraphe* : Allez dans le menu **Fichier** > **Propriétés du projet**, puis dans la section **Langues**, cochez obligatoirement **French** et **English**.
+  * *Correction sur le robot* : Assurez-vous que la langue voulue est configurée :
+    ```bash
+    qicli call ALTextToSpeech.setLanguage "French"
+    ```
+* **`ISerialization error Status Read Past End`** :
+  * Vous utilisez une version incompatible (ex. Choregraphe 2.8). Passez impérativement sur Choregraphe 2.5.10.7.
+
+---
+
+# Partie 3 : Installation et Configuration de Python 2 & du SDK NAOqi (Arch Linux / Omarchy)
 
 Ce guide détaille l'installation de Python 2 et la configuration du SDK SoftBank Robotics (`pynaoqi`) sur un poste de travail sous Arch Linux (Omarchy) afin de piloter un robot Pepper (NAOqi OS 2.5) via des scripts Python externes.
 
@@ -181,7 +260,7 @@ yay -S python2-bin
 ### Méthode B : Compilation manuelle via Git & Makepkg
 ```bash
 cd /tmp
-git clone https://aur.archlinux.org/python2-bin.git
+git clone [https://aur.archlinux.org/python2-bin.git](https://aur.archlinux.org/python2-bin.git)
 cd python2-bin
 makepkg -si
 ```
