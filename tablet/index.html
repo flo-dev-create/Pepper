@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Polytech Montpellier - Accueil Pepper</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+            background: radial-gradient(circle at 50% 30%, #152238 0%, #0a1118 100%);
+            color: #f8f9fa;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 35px 45px;
+            overflow: hidden;
+            user-select: none;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid rgba(0, 180, 216, 0.25);
+            padding-bottom: 20px;
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .polytech-logo {
+            width: 65px;
+            height: 65px;
+            filter: drop-shadow(0 0 10px rgba(0, 180, 216, 0.4));
+        }
+        .header-titles {
+            display: flex;
+            flex-direction: column;
+        }
+        .logo-title {
+            font-size: 30px;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: 1.5px;
+        }
+        .logo-subtitle {
+            font-size: 16px;
+            color: #00b4d8;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        .dept-tag {
+            background: linear-gradient(135deg, #0077b6, #0096c7);
+            color: white;
+            padding: 10px 22px;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(0, 119, 182, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            margin: 25px 0;
+        }
+        .status-badge {
+            font-size: 19px;
+            color: #90e0ef;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+        .dialogue-box {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(0, 180, 216, 0.3);
+            border-radius: 20px;
+            padding: 35px 40px;
+            width: 95%;
+            max-width: 900px;
+            min-height: 240px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+        }
+        .user-query {
+            font-size: 22px;
+            color: #90e0ef;
+            font-style: italic;
+            margin-bottom: 18px;
+            opacity: 0.9;
+        }
+        .robot-response {
+            font-size: 28px;
+            font-weight: 600;
+            color: #ffffff;
+            line-height: 1.45;
+        }
+        footer {
+            display: flex;
+            justify-content: space-between;
+            color: #6c757d;
+            font-size: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding-top: 18px;
+        }
+        footer strong {
+            color: #a0aec0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <!-- Logo vectoriel Polytech (Croix d'Archi) -->
+            <svg class="polytech-logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="48" fill="#0077b6" />
+                <path d="M50 18 L76 34 L76 66 L50 82 L24 66 L24 34 Z" stroke="#ffffff" stroke-width="4" fill="none" />
+                <path d="M50 28 L68 40 L68 60 L50 72 L32 60 L32 40 Z" fill="#00b4d8" />
+                <circle cx="50" cy="50" r="9" fill="#ffffff" />
+            </svg>
+            <div class="header-titles">
+                <div class="logo-title">POLYTECH MONTPELLIER</div>
+                <div class="logo-subtitle">UNIVERSITÉ DE MONTPELLIER</div>
+            </div>
+        </div>
+        <div class="dept-tag">DÉPARTEMENT MEA</div>
+    </header>
+
+    <main>
+        <div id="status" class="status-badge">● En veille - Approchez-vous</div>
+        <div class="dialogue-box">
+            <div id="query" class="user-query">En attente d'un visiteur...</div>
+            <div id="response" class="robot-response">Bonjour ! Je suis Pepper, le robot d'accueil de Polytech.</div>
+        </div>
+    </main>
+
+    <footer>
+        <span>Bâtiment 31 — Campus Triolet</span>
+        <span>Système d'Accueil Autonome <strong>MEA</strong></span>
+    </footer>
+
+    <script>
+        function updateUI(statusText, queryText, responseText) {
+            if (statusText) document.getElementById('status').innerText = statusText;
+            if (queryText) document.getElementById('query').innerText = queryText;
+            if (responseText) document.getElementById('response').innerText = responseText;
+        }
+    </script>
+</body>
+</html>
