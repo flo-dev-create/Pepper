@@ -40,6 +40,8 @@ sudo apt install python2 python3 python3-pip ffmpeg rsync openssh-client
 Pepper tourne sous **NAOqi 2.5**, dont les bibliothèques C++/Python officielles nécessitent **Python 2.7**. Le SDK n'est pas tracké sur Git en raison de son poids (~200 Mo).
 
 1. Récupère l'archive du SDK : `pynaoqi-python2.7-2.5.7.1-linux64.tar.gz`.
+
+`https://web.archive.org/web/*/https://community-static.aldebaran.com/resources/*`
 2. Extrais l'archive à la racine du projet :
 ```bash
 tar -xvf pynaoqi-python2.7-2.5.7.1-linux64.tar.gz
