@@ -1,0 +1,7 @@
+.env
+*.wav
+__pycache__/
+*.pyc
+pynaoqi-python2.7-2.5.7.1-linux64/
+*.tar.gz
+say/*.tar.gz
